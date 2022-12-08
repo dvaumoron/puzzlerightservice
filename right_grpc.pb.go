@@ -27,6 +27,7 @@ type RightClient interface {
 	RoleRight(ctx context.Context, in *RoleRequest, opts ...grpc.CallOption) (*Actions, error)
 	UpdateUser(ctx context.Context, in *UserRight, opts ...grpc.CallOption) (*RightResponse, error)
 	UpdateRole(ctx context.Context, in *Role, opts ...grpc.CallOption) (*RightResponse, error)
+	ListUserRoles(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*Roles, error)
 }
 
 type rightClient struct {
@@ -82,6 +83,15 @@ func (c *rightClient) UpdateRole(ctx context.Context, in *Role, opts ...grpc.Cal
 	return out, nil
 }
 
+func (c *rightClient) ListUserRoles(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*Roles, error) {
+	out := new(Roles)
+	err := c.cc.Invoke(ctx, "/puzzlerightservice.Right/ListUserRoles", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RightServer is the server API for Right service.
 // All implementations must embed UnimplementedRightServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type RightServer interface {
 	RoleRight(context.Context, *RoleRequest) (*Actions, error)
 	UpdateUser(context.Context, *UserRight) (*RightResponse, error)
 	UpdateRole(context.Context, *Role) (*RightResponse, error)
+	ListUserRoles(context.Context, *UserId) (*Roles, error)
 	mustEmbedUnimplementedRightServer()
 }
 
@@ -112,6 +123,9 @@ func (UnimplementedRightServer) UpdateUser(context.Context, *UserRight) (*RightR
 }
 func (UnimplementedRightServer) UpdateRole(context.Context, *Role) (*RightResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateRole not implemented")
+}
+func (UnimplementedRightServer) ListUserRoles(context.Context, *UserId) (*Roles, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUserRoles not implemented")
 }
 func (UnimplementedRightServer) mustEmbedUnimplementedRightServer() {}
 
@@ -216,6 +230,24 @@ func _Right_UpdateRole_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Right_ListUserRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RightServer).ListUserRoles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/puzzlerightservice.Right/ListUserRoles",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RightServer).ListUserRoles(ctx, req.(*UserId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Right_ServiceDesc is the grpc.ServiceDesc for Right service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +274,10 @@ var Right_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateRole",
 			Handler:    _Right_UpdateRole_Handler,
+		},
+		{
+			MethodName: "ListUserRoles",
+			Handler:    _Right_ListUserRoles_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

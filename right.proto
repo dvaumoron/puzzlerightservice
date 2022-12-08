@@ -28,6 +28,7 @@ service Right {
     rpc RoleRight (RoleRequest) returns (Actions);
     rpc UpdateUser (UserRight) returns (RightResponse);
     rpc UpdateRole (Role) returns (RightResponse);
+    rpc ListUserRoles (UserId) returns (Roles);
 }
 
 enum RightAction {
@@ -73,4 +74,8 @@ message RoleRequest {
 message UserRight {
     uint64 userId = 1;
     repeated RoleRequest list = 2;
+}
+
+message UserId {
+    uint64 Id = 1;
 }
