@@ -72,5 +72,5 @@ message RoleRequest {
 
 message UserRight {
     uint64 userId = 1;
-    Roles list = 2;
+    repeated RoleRequest list = 2;
 }
