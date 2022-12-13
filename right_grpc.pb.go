@@ -22,11 +22,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RightClient interface {
-	AuthQuery(ctx context.Context, in *RightRequest, opts ...grpc.CallOption) (*RightResponse, error)
+	AuthQuery(ctx context.Context, in *RightRequest, opts ...grpc.CallOption) (*Response, error)
 	ListRoles(ctx context.Context, in *ObjectIds, opts ...grpc.CallOption) (*Roles, error)
 	RoleRight(ctx context.Context, in *RoleRequest, opts ...grpc.CallOption) (*Actions, error)
-	UpdateUser(ctx context.Context, in *UserRight, opts ...grpc.CallOption) (*RightResponse, error)
-	UpdateRole(ctx context.Context, in *Role, opts ...grpc.CallOption) (*RightResponse, error)
+	UpdateUser(ctx context.Context, in *UserRight, opts ...grpc.CallOption) (*Response, error)
+	UpdateRole(ctx context.Context, in *Role, opts ...grpc.CallOption) (*Response, error)
 	ListUserRoles(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*Roles, error)
 }
 
@@ -38,8 +38,8 @@ func NewRightClient(cc grpc.ClientConnInterface) RightClient {
 	return &rightClient{cc}
 }
 
-func (c *rightClient) AuthQuery(ctx context.Context, in *RightRequest, opts ...grpc.CallOption) (*RightResponse, error) {
-	out := new(RightResponse)
+func (c *rightClient) AuthQuery(ctx context.Context, in *RightRequest, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/puzzlerightservice.Right/AuthQuery", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -65,8 +65,8 @@ func (c *rightClient) RoleRight(ctx context.Context, in *RoleRequest, opts ...gr
 	return out, nil
 }
 
-func (c *rightClient) UpdateUser(ctx context.Context, in *UserRight, opts ...grpc.CallOption) (*RightResponse, error) {
-	out := new(RightResponse)
+func (c *rightClient) UpdateUser(ctx context.Context, in *UserRight, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/puzzlerightservice.Right/UpdateUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -74,8 +74,8 @@ func (c *rightClient) UpdateUser(ctx context.Context, in *UserRight, opts ...grp
 	return out, nil
 }
 
-func (c *rightClient) UpdateRole(ctx context.Context, in *Role, opts ...grpc.CallOption) (*RightResponse, error) {
-	out := new(RightResponse)
+func (c *rightClient) UpdateRole(ctx context.Context, in *Role, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/puzzlerightservice.Right/UpdateRole", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -96,11 +96,11 @@ func (c *rightClient) ListUserRoles(ctx context.Context, in *UserId, opts ...grp
 // All implementations must embed UnimplementedRightServer
 // for forward compatibility
 type RightServer interface {
-	AuthQuery(context.Context, *RightRequest) (*RightResponse, error)
+	AuthQuery(context.Context, *RightRequest) (*Response, error)
 	ListRoles(context.Context, *ObjectIds) (*Roles, error)
 	RoleRight(context.Context, *RoleRequest) (*Actions, error)
-	UpdateUser(context.Context, *UserRight) (*RightResponse, error)
-	UpdateRole(context.Context, *Role) (*RightResponse, error)
+	UpdateUser(context.Context, *UserRight) (*Response, error)
+	UpdateRole(context.Context, *Role) (*Response, error)
 	ListUserRoles(context.Context, *UserId) (*Roles, error)
 	mustEmbedUnimplementedRightServer()
 }
@@ -109,7 +109,7 @@ type RightServer interface {
 type UnimplementedRightServer struct {
 }
 
-func (UnimplementedRightServer) AuthQuery(context.Context, *RightRequest) (*RightResponse, error) {
+func (UnimplementedRightServer) AuthQuery(context.Context, *RightRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AuthQuery not implemented")
 }
 func (UnimplementedRightServer) ListRoles(context.Context, *ObjectIds) (*Roles, error) {
@@ -118,10 +118,10 @@ func (UnimplementedRightServer) ListRoles(context.Context, *ObjectIds) (*Roles, 
 func (UnimplementedRightServer) RoleRight(context.Context, *RoleRequest) (*Actions, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RoleRight not implemented")
 }
-func (UnimplementedRightServer) UpdateUser(context.Context, *UserRight) (*RightResponse, error) {
+func (UnimplementedRightServer) UpdateUser(context.Context, *UserRight) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
 }
-func (UnimplementedRightServer) UpdateRole(context.Context, *Role) (*RightResponse, error) {
+func (UnimplementedRightServer) UpdateRole(context.Context, *Role) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateRole not implemented")
 }
 func (UnimplementedRightServer) ListUserRoles(context.Context, *UserId) (*Roles, error) {

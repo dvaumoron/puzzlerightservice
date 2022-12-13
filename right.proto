@@ -23,11 +23,11 @@ package puzzlerightservice;
 
 // The session service definition.
 service Right {
-    rpc AuthQuery (RightRequest) returns (RightResponse);
+    rpc AuthQuery (RightRequest) returns (Response);
     rpc ListRoles (ObjectIds) returns (Roles);
     rpc RoleRight (RoleRequest) returns (Actions);
-    rpc UpdateUser (UserRight) returns (RightResponse);
-    rpc UpdateRole (Role) returns (RightResponse);
+    rpc UpdateUser (UserRight) returns (Response);
+    rpc UpdateRole (Role) returns (Response);
     rpc ListUserRoles (UserId) returns (Roles);
 }
 
@@ -44,22 +44,18 @@ message RightRequest {
     RightAction action = 3;
 }
 
-message RightResponse {
-    bool authorized = 1;
+message Response {
+    bool success = 1;
 }
 
 message ObjectIds {
     repeated uint64 ids = 1;
 }
 
-message Actions {
-    repeated RightAction list = 1;
-}
-
 message Role {
     string name = 1;
     uint64 objectId = 2;
-    Actions list = 3;
+    repeated RightAction list = 3;
 }
 
 message Roles {
@@ -69,6 +65,10 @@ message Roles {
 message RoleRequest {
     string name = 1;
     uint64 objectId = 2;
+}
+
+message Actions {
+    repeated RightAction list = 1;
 }
 
 message UserRight {
