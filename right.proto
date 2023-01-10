@@ -77,5 +77,5 @@ message UserRight {
 }
 
 message UserId {
-    uint64 Id = 1;
+    uint64 id = 1;
 }
