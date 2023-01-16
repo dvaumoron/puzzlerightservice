@@ -21,7 +21,7 @@ option java_outer_classname = "PuzzleRightServiceProto";
 
 package puzzlerightservice;
 
-// The session service definition.
+// The right service definition.
 service Right {
     rpc AuthQuery (RightRequest) returns (Response);
     rpc ListRoles (ObjectIds) returns (Roles);
